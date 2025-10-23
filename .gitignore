@@ -1,0 +1,14 @@
+data
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment / editor
+.env
+*.log
+*.bak
+*.tmp
+.vscode/
+.idea/
+*.swp
