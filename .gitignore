@@ -1,4 +1,6 @@
 data
+outputs
+output_folder
 # System
 .DS_Store
 Thumbs.db
