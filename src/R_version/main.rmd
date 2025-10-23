@@ -1,0 +1,160 @@
+---
+title: "My analysis"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup-paths}
+# Load required package
+library(fs)
+
+# Set output and data directories (use environment vars if available)
+output_dir <- Sys.getenv("output_dir", unset = "/app/output_folder")
+data_dir   <- Sys.getenv("data_dir", unset = "/app/data")
+
+# Create output directory if it doesn't exist
+dir_create(output_dir)
+
+# Print to confirm
+cat("Output directory:", output_dir, "\n")
+cat("Data directory:", data_dir, "\n")
+```
+
+```{r load-libraries}
+# Load required libraries
+library(tidyverse)     # for data manipulation
+library(caret)         # for modeling and cross-validation
+library(recipes)       # for preprocessing pipelines
+library(glmnet)        # for logistic regression variants
+library(DMwR2)         # for KNN imputation (knnImputation)
+
+cat("Loaded libraries\n")
+```
+
+```{r load-data}
+# Load CSV data
+train <- read_csv(file.path(data_dir, "train.csv"))
+test  <- read_csv(file.path(data_dir, "test.csv"))
+
+# Keep a raw copy of test for PassengerId (or other metadata)
+test_raw <- read_csv(file.path(data_dir, "test.csv"))
+
+cat("Loaded data\n")
+```
+
+```{r clean-and-impute}
+# Drop unnecessary columns
+drop_cols <- c("Cabin", "PassengerId", "Name", "Ticket", "Embarked")
+train <- train %>% select(-any_of(drop_cols))
+test  <- test  %>% select(-any_of(drop_cols))
+
+cat("Dropped columns:", paste(drop_cols, collapse = ", "), "from data\n")
+
+# Numeric features
+num_features <- c("Age", "Fare", "SibSp", "Parch", "Pclass")
+
+# KNN imputation and scaling using DMwR2 + caret
+# Scale numeric columns
+train_scaled <- scale(train[, num_features])
+test_scaled  <- scale(test[, num_features],
+                      center = attr(train_scaled, "scaled:center"),
+                      scale  = attr(train_scaled, "scaled:scale"))
+
+# Impute missing values with KNN
+train_imputed <- DMwR2::knnImputation(as.data.frame(train_scaled),
+                                      k = 5, scale = FALSE)
+test_imputed  <- DMwR2::knnImputation(as.data.frame(test_scaled),
+                                      k = 5, scale = FALSE)
+
+# Unscale back to original units
+train[, num_features] <- sweep(train_imputed, 2, attr(train_scaled, "scaled:scale"),`*`) + # nolint
+                         attr(train_scaled, "scaled:center") # nolint
+test[, num_features]  <- sweep(test_imputed,  2, attr(train_scaled, "scaled:scale"), `*`) + # nolint
+                         attr(train_scaled, "scaled:center") # nolint
+
+cat('Imputed missing "Age" values (Method = KNN)\n')
+
+# Drop remaining rows with NAs in key columns
+cols_to_check <- c(num_features, "Sex", "Survived")
+train <- train %>% drop_na(any_of(cols_to_check))
+
+cat("Dropped any remaining rows with NULL values\n")
+```
+
+```{r partition-data}
+# Define target and feature sets
+y_train <- train$Survived
+
+X_train <- train %>% # nolint
+  select(Pclass, Sex, Age, SibSp, Parch, Fare)
+
+X_test <- test %>% # nolint
+  select(Pclass, Sex, Age, SibSp, Parch, Fare)
+
+# One-hot encode categorical variable 'Sex' and align columns
+X_train <- X_train %>% # nolint
+  mutate(Sex = if_else(Sex == "male", 1, 0))
+
+X_test <- X_test %>% # nolint
+  mutate(Sex = if_else(Sex == "male", 1, 0))
+
+# Ensure X_test has same columns as X_train
+missing_cols <- setdiff(names(X_train), names(X_test))
+for (col in missing_cols) X_test[[col]] <- 0 # nolint
+X_test <- X_test[, names(X_train)] # nolint
+
+cat('Partitioned data into "X_train", "y_train", and "X_test"\n')
+```
+
+```{r train-model}
+# Define logistic regression model
+set.seed(42)
+
+# caret::train automatically performs cross-validation
+train_control <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = FALSE
+)
+
+# Train the logistic regression model
+clf <- train(
+  x = X_train,
+  y = as.factor(y_train),
+  method = "glm",
+  family = "binomial",
+  trControl = train_control
+)
+
+# caret stores resampling results
+acc <- clf$results$Accuracy
+std <- sd(clf$resample$Accuracy)
+
+cat("Trained model and used stratified 5-fold cross validation to evaluate\n")
+cat(sprintf("CV Accuracy: %.3f ± %.3f\n", mean(acc), std))
+```
+
+```{r predict-and-save}
+# Fit logistic regression on the full training data
+final_model <- glm(Survived ~ ., data = cbind(X_train, Survived = y_train),
+                   family = binomial)
+
+# Predict on X_test
+y_pred <- predict(final_model, newdata = X_test, type = "response")
+y_pred <- ifelse(y_pred > 0.5, 1, 0)
+
+cat("Fitted model and predicted on X_test\n")
+
+# Create predictions DataFrame
+predictions <- tibble(
+  PassengerId = test_raw$PassengerId,
+  Survived = y_pred
+)
+
+# Save to output directory
+out_path <- file.path(output_dir, "predictions_r.csv")
+write_csv(predictions, out_path)
+
+cat(sprintf("Predictions saved to %s\n", out_path))
+```
