@@ -5,6 +5,7 @@ Thumbs.db
 desktop.ini
 
 # Environment / editor
+.venv
 .env
 *.log
 *.bak
