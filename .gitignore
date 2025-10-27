@@ -15,3 +15,5 @@ desktop.ini
 .idea/
 *.swp
 *.csv
+!src/data/*.csv
+src/data/*.csv
