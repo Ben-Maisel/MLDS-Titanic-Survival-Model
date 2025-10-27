@@ -1,0 +1,8 @@
+.git
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+/app/output_folder
+/app/data
+.DS_Store

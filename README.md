@@ -23,3 +23,13 @@ from the repo root
   titanic-notebook
 
 
+
+
+docker build --build-arg SNAPSHOT_DATE=2025-10-01 -t titanic-rmd -f .\src\R_version\Dockerfile .
+
+mkdir -Force .\output_folder
+docker run --rm `
+  -v ${PWD}\src\data:/app/data `
+  -v ${PWD}\output_folder:/app/output_folder `
+  titanic-rmd
+
