@@ -25,7 +25,7 @@ from the repo root
 
 
 
-docker build -t titanic-rmd -f .\src\R_version\Dockerfile .
+docker build --build-arg SNAPSHOT_DATE=2025-10-01 -t titanic-rmd -f .\src\R_version\Dockerfile .
 
 mkdir -Force .\output_folder
 docker run --rm `

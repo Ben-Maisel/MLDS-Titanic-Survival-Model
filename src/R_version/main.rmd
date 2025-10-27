@@ -4,6 +4,7 @@ author: "Your Name"
 date: "`r Sys.Date()`"
 output: html_document
 ---
+silent <- function(expr) invisible(capture.output(expr))
 
 ```{r setup-paths}
 # Load required package
@@ -27,9 +28,25 @@ library(tidyverse)     # for data manipulation
 library(caret)         # for modeling and cross-validation
 library(recipes)       # for preprocessing pipelines
 library(glmnet)        # for logistic regression variants
-library(DMwR2)         # for KNN imputation (knnImputation)
+library(VIM)         # for KNN imputation (knnImputation)
 
 cat("Loaded libraries\n")
+```
+
+```{r console-echo, include=FALSE}
+# Forward only user-generated print/cat output to the terminal
+orig_out <- knitr::knit_hooks$get("output")
+knitr::knit_hooks$set(output = function(x, options) {
+  # Only forward to terminal if it's user output (cat/print), not code
+  if (!options$echo) cat(x)
+  orig_out(x, options)
+})
+
+knitr::opts_chunk$set(
+  echo = FALSE,     # don't show code unless explicitly enabled
+  message = FALSE,  # suppress library load chatter in terminal + HTML
+  warning = FALSE   # suppress warnings unless you explicitly show them
+)
 ```
 
 ```{r load-data}
@@ -54,31 +71,29 @@ cat("Dropped columns:", paste(drop_cols, collapse = ", "), "from data\n")
 # Numeric features
 num_features <- c("Age", "Fare", "SibSp", "Parch", "Pclass")
 
-# KNN imputation and scaling using DMwR2 + caret
-# Scale numeric columns
-train_scaled <- scale(train[, num_features])
-test_scaled  <- scale(test[, num_features],
-                      center = attr(train_scaled, "scaled:center"),
-                      scale  = attr(train_scaled, "scaled:scale"))
+invisible(capture.output({
+  # Scale numeric columns
+  train_scaled <- scale(train[, num_features])
+  test_scaled  <- scale(test[, num_features],
+                        center = attr(train_scaled, "scaled:center"),
+                        scale  = attr(train_scaled, "scaled:scale"))
 
-# Impute missing values with KNN
-train_imputed <- DMwR2::knnImputation(as.data.frame(train_scaled),
-                                      k = 5, scale = FALSE)
-test_imputed  <- DMwR2::knnImputation(as.data.frame(test_scaled),
-                                      k = 5, scale = FALSE)
+  # KNN imputation
+  train_imputed <- VIM::kNN(as.data.frame(train_scaled), k = 5, imp_var = FALSE)
+  test_imputed  <- VIM::kNN(as.data.frame(test_scaled),  k = 5, imp_var = FALSE)
 
-# Unscale back to original units
-train[, num_features] <- sweep(train_imputed, 2, attr(train_scaled, "scaled:scale"),`*`) + # nolint
-                         attr(train_scaled, "scaled:center") # nolint
-test[, num_features]  <- sweep(test_imputed,  2, attr(train_scaled, "scaled:scale"), `*`) + # nolint
-                         attr(train_scaled, "scaled:center") # nolint
+  # Unscale back to original units
+  train[, num_features] <- sweep(train_imputed, 2, attr(train_scaled, "scaled:scale"), `*`) + #nolint
+                           attr(train_scaled, "scaled:center") #nolint
+  test[,  num_features] <- sweep(test_imputed,  2, attr(train_scaled, "scaled:scale"), `*`) + #nolint
+                           attr(train_scaled, "scaled:center") #nolint
+
+  # Drop remaining rows with NAs in key columns
+  cols_to_check <- c(num_features, "Sex", "Survived")
+  train <- train %>% drop_na(any_of(cols_to_check))
+}))
 
 cat('Imputed missing "Age" values (Method = KNN)\n')
-
-# Drop remaining rows with NAs in key columns
-cols_to_check <- c(num_features, "Sex", "Survived")
-train <- train %>% drop_na(any_of(cols_to_check))
-
 cat("Dropped any remaining rows with NULL values\n")
 ```
 
