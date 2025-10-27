@@ -1,4 +1,3 @@
-data
 outputs
 output_folder
 # System
@@ -15,3 +14,4 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+*.csv
