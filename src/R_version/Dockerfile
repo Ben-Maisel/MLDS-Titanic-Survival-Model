@@ -30,5 +30,5 @@ ENV DATA_DIR=/app/data
 ENV MAKEFLAGS="-j$(nproc)"
 
 CMD ["bash","-lc","mkdir -p \"$OUTPUT_DIR\" \"$DATA_DIR\" \
-  && R -q -e \"rmarkdown::render('/app/main.rmd', output_file='/app/main.rendered.html', quiet = FALSE)\" \
+  && R -q -e \"rmarkdown::render('/app/main.rmd', output_file='/app/main.rendered.html', quiet = TRUE)\" \
   && ls -l $OUTPUT_DIR"]
