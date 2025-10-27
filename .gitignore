@@ -1,3 +1,11 @@
+
+# Ignore CSVs in data folder
+src/data/*.csv
+
+# But keep the folder itself
+!src/data/
+!src/data/.gitkeep
+
 outputs
 output_folder
 # System
@@ -14,6 +22,3 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
-*.csv
-!src/data/*.csv
-src/data/*.csv
