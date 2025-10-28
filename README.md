@@ -86,13 +86,13 @@ You must start by building the Docker Image. Make sure that your working directo
 
 Choose which language you would like to run the model (R or Python). The model is identical in both languages, however both are included here. The build command may take a few minutes to run the first time for each version, this is normal.
 
-3.1 R version
+### R version
 
 if you wish to run the R version of the model, paste the following command:
 ```
 docker build --build-arg SNAPSHOT_DATE=2025-10-01 -t titanic-rmd -f ./src/R_version/Dockerfile .
 ```
-3.2 Python version
+ ### Python version
 
 if you wish to run the Python version of the model, paste the following command:
 ```
@@ -103,7 +103,7 @@ docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
 
 Now that the image is built, you must give the command to actually run the container and get the output. **MAKE SURE YOU RUN THE COMMAND THAT CORRESPONDS TO YOUR BUILD VERSION.**
 
-4.1 R version
+### R version
 
 paste this command:
 ```
@@ -114,7 +114,7 @@ docker run --rm \
   titanic-rmd
 ```
 
-4.2 Python version
+### Python version
 
 paste this command:
 ```
