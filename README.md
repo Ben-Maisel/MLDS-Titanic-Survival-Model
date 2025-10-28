@@ -127,3 +127,4 @@ paste this command:
 
 5. Observe Results
 
+Once the container runs, a new folder will be created in the directory root called `output_folder`. Inside this folder will be a file called predictions_python.csv or predictions_R.csv depending on which version you ran. This file contains the predictions for whether or not each passenger in the test set survived.
