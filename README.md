@@ -24,7 +24,7 @@ clone this repo to your local machine. The easiest way to do this is to open you
 
 once you clone the repo, you will have a file structure on your local machine that looks like this:
 
-
+```
 MLDS-Titanic-Survival-Model/
 ├─ src/
 │  ├─ data/
@@ -44,7 +44,7 @@ MLDS-Titanic-Survival-Model/
 ├─ .gitignore
 ├─ CODEOWNERS
 └─ README.md
-
+```
 
 2. Download the Data:
 
@@ -53,7 +53,7 @@ visit this link (https://www.kaggle.com/competitions/titanic/Data) and download 
 **IT IS VERY IMPORTANT THAT YOU DO NOT RENAME ANY OF THE FILES OR FOLDERS IN THE PROJECT DIRECTORY. THE BUILD AND RUN PROCESSES WILL NOT WORK IF EVERYTHING IS NOT NAMED EXACTLY.** 
 
 If you did this correctly, you will have a file structure that looks like this:
-
+```
 MLDS-Titanic-Survival-Model/
 ├─ src/
 │  ├─ data/
@@ -76,7 +76,7 @@ MLDS-Titanic-Survival-Model/
 ├─ .gitignore
 ├─ CODEOWNERS
 └─ README.md
-
+```
 
 3. Build the Docker Image
 
