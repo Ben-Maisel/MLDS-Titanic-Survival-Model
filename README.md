@@ -19,9 +19,9 @@ STEPS TO RUN THIS PROJECT:
 1. Clone the Repo:
 
 clone this repo to your local machine. The easiest way to do this is to open your terminal, navigate to the directory you want to download this project and paste the following:
-
-  git clone https://github.com/Ben-Maisel/MLDS-Titanic-Survival-Model.git
-
+```
+git clone https://github.com/Ben-Maisel/MLDS-Titanic-Survival-Model.git
+```
 once you clone the repo, you will have a file structure on your local machine that looks like this:
 
 ```
@@ -89,15 +89,15 @@ Choose which language you would like to run the model (R or Python). The model i
 3.1 R version
 
 if you wish to run the R version of the model, paste the following command:
-
-  docker build --build-arg SNAPSHOT_DATE=2025-10-01 -t titanic-rmd -f ./src/R_version/Dockerfile .
-
+```
+docker build --build-arg SNAPSHOT_DATE=2025-10-01 -t titanic-rmd -f ./src/R_version/Dockerfile .
+```
 3.2 Python version
 
 if you wish to run the Python version of the model, paste the following command:
-
-  docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
-
+```
+docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
+```
 
 4. Run the Docker Container
 
@@ -106,24 +106,24 @@ Now that the image is built, you must give the command to actually run the conta
 4.1 R version
 
 paste this command:
-
-  mkdir -p output_folder
-  docker run --rm \
-    -v "$PWD/src/data:/app/data" \
-    -v "$PWD/output_folder:/app/output_folder" \
-    titanic-rmd
-
+```
+mkdir -p output_folder
+docker run --rm \
+  -v "$PWD/src/data:/app/data" \
+  -v "$PWD/output_folder:/app/output_folder" \
+  titanic-rmd
+```
 
 4.2 Python version
 
 paste this command:
-
-  mkdir -p output_folder
-  docker run --rm \
-    -v "$PWD/src/data:/app/data" \
-    -v "$PWD/output_folder:/app/output_folder" \
-    titanic-notebook
-
+```
+mkdir -p output_folder
+docker run --rm \
+  -v "$PWD/src/data:/app/data" \
+  -v "$PWD/output_folder:/app/output_folder" \
+  titanic-notebook
+```
 
 5. Observe Results
 
