@@ -1,4 +1,13 @@
-data
+
+# Ignore CSVs in data folder
+src/data/*.csv
+
+# But keep the folder itself
+!src/data/
+!src/data/.gitkeep
+
+outputs
+output_folder
 # System
 .DS_Store
 Thumbs.db
