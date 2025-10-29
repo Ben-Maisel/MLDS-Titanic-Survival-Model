@@ -107,22 +107,16 @@ Now that the image is built, you must give the command to actually run the conta
 
 paste this command:
 ```
-mkdir -p output_folder
-docker run --rm \
-  -v "$PWD/src/data:/app/data" \
-  -v "$PWD/output_folder:/app/output_folder" \
-  titanic-rmd
+if (!(Test-Path output_folder)) { New-Item -ItemType Directory -Path output_folder | Out-Null } 2>$null; docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-rmd
+
 ```
 
 ### Python version
 
 paste this command:
 ```
-mkdir -p output_folder
-docker run --rm \
-  -v "$PWD/src/data:/app/data" \
-  -v "$PWD/output_folder:/app/output_folder" \
-  titanic-notebook
+docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-notebook
+
 ```
 
 5. Observe Results
