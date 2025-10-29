@@ -109,9 +109,14 @@ Now that the image is built, you must give the command to actually run the conta
 
 ### R version
 
-**POWERSHELL** paste this command:
+**POWERSHELL (WINDOWS)** paste this command:
 ```
 docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-rmd
+
+```
+**GIT BASH (WINDOWS)** paste this command:
+```
+docker run --rm -v "$(pwd -W)/src/data:/app/data" -v "$(pwd -W)/output_folder:/app/output_folder" titanic-rmd
 
 ```
 
@@ -123,10 +128,14 @@ docker run --rm -v "$(pwd)/src/data:/app/data" -v "$(pwd)/output_folder:/app/out
 
 ### Python version
 
-**POWERSHELL** paste this command:
+**POWERSHELL (WINDOWS)** paste this command:
 ```
 docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-notebook
 
+```
+**GIT BASH (WINDOWS)** paste this command:
+```
+docker run --rm -v "$(pwd -W)/src/data:/app/data" -v "$(pwd -W)/output_folder:/app/output_folder" titanic-notebook
 ```
 
 **LINUX/MacOS** paste this command:
