@@ -105,21 +105,33 @@ docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
 
 4. Run the Docker Container
 
-Now that the image is built, you must give the command to actually run the container and get the output. **MAKE SURE YOU RUN THE COMMAND THAT CORRESPONDS TO YOUR BUILD VERSION.**
+Now that the image is built, you must give the command to actually run the container and get the output. **MAKE SURE YOU RUN THE COMMAND THAT CORRESPONDS TO YOUR BUILD VERSION AND OPERATING SYSTEM.**
 
 ### R version
 
-paste this command:
+**POWERSHELL** paste this command:
 ```
-if (!(Test-Path output_folder)) { New-Item -ItemType Directory -Path output_folder | Out-Null } 2>$null; docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-rmd
+docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-rmd
+
+```
+
+**LINUX/MacOS** paste this command:
+```
+docker run --rm -v "$(pwd)/src/data:/app/data" -v "$(pwd)/output_folder:/app/output_folder" titanic-rmd
 
 ```
 
 ### Python version
 
-paste this command:
+**POWERSHELL** paste this command:
 ```
 docker run --rm -v "${PWD}/src/data:/app/data" -v "${PWD}/output_folder:/app/output_folder" titanic-notebook
+
+```
+
+**LINUX/MacOS** paste this command:
+```
+docker run --rm -v "$(pwd)/src/data:/app/data" -v "$(pwd)/output_folder:/app/output_folder" titanic-notebook
 
 ```
 
