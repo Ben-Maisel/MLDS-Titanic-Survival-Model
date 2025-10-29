@@ -84,6 +84,10 @@ You must start by building the Docker Image. Make sure that your working directo
 
   /.../MLDS-Titanic-Survival-Model>
 
+paste the following command to navigate there:
+```
+cd MLDS-Titanic-Survival-Model
+```
 Choose which language you would like to run the model (R or Python). The model is identical in both languages, however both are included here. The build command may take a few minutes to run the first time for each version, this is normal.
 
 ### R version
