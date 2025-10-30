@@ -18,6 +18,9 @@ You must also have Git installed and setup on your machine. I recommend followin
 
 1. ### Clone the Repo:
 
+```
+![Clone Demo](assets/clone.gif)
+```
 clone this repo to your local machine. The easiest way to do this is to open your terminal, navigate to the directory you want to download this project and paste the following:
 ```
 git clone https://github.com/Ben-Maisel/MLDS-Titanic-Survival-Model.git
@@ -26,6 +29,8 @@ once you clone the repo, you will have a file structure on your local machine th
 
 ```
 MLDS-Titanic-Survival-Model/
+├─ assets/
+│
 ├─ src/
 │  ├─ data/
 │  │  └─ .gitkeep
@@ -44,17 +49,24 @@ MLDS-Titanic-Survival-Model/
 ├─ .gitignore
 ├─ CODEOWNERS
 └─ README.md
+
 ```
 
 2. ### Download the Data:
 
-visit this link (https://www.kaggle.com/competitions/titanic/Data) and download the data. You will need to make a kaggle account if you do not have one. To find the data, scroll down the page, there will be a button that says "Download All" on the right side of the page. Click this button and the data will download as a .zip file on your machine. Extract the data from the .zip file for a tutorial on how to do this, follow this guide (https://www.wikihow.com/Unzip-a-File). There will be 3 files titled "train.csv", "test.csv", "gender_submission.csv" move these 3 files into the src/data folder. 
+```
+![Data Demo](assets/data.gif)
+```
+
+visit this link (https://www.kaggle.com/competitions/titanic/Data) and download the data. You will need to make a kaggle account if you do not have one. To find the data, scroll down the page, there will be a button that says "Download All" on the right side of the page. Click this button and the data will download as a .zip file on your machine. Extract the data from the .zip file, there will be 3 files titled "train.csv", "test.csv", "gender_submission.csv" move these 3 files into the src/data folder. 
 
 **IT IS VERY IMPORTANT THAT YOU DO NOT RENAME ANY OF THE FILES OR FOLDERS IN THE PROJECT DIRECTORY. THE BUILD AND RUN PROCESSES WILL NOT WORK IF EVERYTHING IS NOT NAMED EXACTLY.** 
 
 If you did this correctly, you will have a file structure that looks like this:
 ```
 MLDS-Titanic-Survival-Model/
+├─ assets/
+│
 ├─ src/
 │  ├─ data/
 │  │  ├─ train.csv
@@ -76,18 +88,27 @@ MLDS-Titanic-Survival-Model/
 ├─ .gitignore
 ├─ CODEOWNERS
 └─ README.md
+
 ```
 
 3. ### Build the Docker Image
 
+```
+![CD Demo](assets/change_dir.gif)
+```
+
 You must start by building the Docker Image. Make sure that your working directory is the project root. If you are unsure, you can tell by making sure your terminal line heading looks something like this: 
 
-  /.../MLDS-Titanic-Survival-Model>
+  /.../MLDS-Titanic-Survival-Model
 
 paste the following command to navigate there:
 ```
 cd MLDS-Titanic-Survival-Model
 ```
+```
+![Build Demo](assets/build.gif)
+```
+
 Choose which language you would like to run the model (R or Python). The model is identical in both languages, however both are included here. The build command may take a few minutes to run the first time for each version, this is normal.
 
 #### R version
@@ -104,6 +125,10 @@ docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
 ```
 
 4. ### Run the Docker Container
+
+```
+![Run Demo](assets/run.gif)
+```
 
 Now that the image is built, you must give the command to actually run the container and get the output. **MAKE SURE YOU RUN THE COMMAND THAT CORRESPONDS TO YOUR BUILD VERSION AND OPERATING SYSTEM.**
 
@@ -145,5 +170,9 @@ docker run --rm -v "$(pwd)/src/data:/app/data" -v "$(pwd)/output_folder:/app/out
 ```
 
 5. ### Observe Results
+
+```
+![output Demo](assets/output.gif)
+```
 
 Once the container runs, a new folder will be created in the directory root called `output_folder`. Inside this folder will be a file called predictions_python.csv or predictions_R.csv depending on which version you ran. This file contains the predictions for whether or not each passenger in the test set survived.
