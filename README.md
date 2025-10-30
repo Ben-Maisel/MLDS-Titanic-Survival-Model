@@ -1,22 +1,22 @@
 # MLDS-Titanic-Survival-Model
 
-## INTRODUCTION:
+# INTRODUCTION:
 
 This repo contains a logistic regression model that predicts whether passengers aboard the Titanic survived or not.
 
 The point of this project is not the model itself, rather to demonstrate my ability to create a workflow that is maintainable, easily shareable, and consistent across machines. I achieve this by using Git for version and environment management (Main, Develop, Test branches), and Docker for consistency across systems.
 
 
-## PREREQUISITES:
+# PREREQUISITES:
 
 In order to run this project, you must first have Docker installed and setup on your machine. I recommend installing Docker Desktop from here (https://www.docker.com/products/docker-desktop/). Run the installer and follow the setup instructions.
 
 You must also have Git installed and setup on your machine. I recommend following this guide (https://github.com/git-guides/install-git)
 
 
-## STEPS TO RUN THIS PROJECT:
+# STEPS TO RUN THIS PROJECT:
 
-1. ### Clone the Repo:
+1. ## Clone the Repo:
 
 
 ![Clone Demo](assets/clone.gif)
@@ -52,7 +52,7 @@ MLDS-Titanic-Survival-Model/
 
 ```
 
-2. ### Download the Data:
+2. ## Download the Data:
 
 
 ![Data Demo](assets/data.gif)
@@ -91,9 +91,9 @@ MLDS-Titanic-Survival-Model/
 
 ```
 
-3. ### Build the Docker Image
+3. ## Build the Docker Image
 
-
+### Navigate to the Correct Directory
 ![CD Demo](assets/change_dir.gif)
 
 
@@ -106,6 +106,7 @@ paste the following command to navigate there:
 cd MLDS-Titanic-Survival-Model
 ```
 
+### Build the Docker Image
 ![Build Demo](assets/build.gif)
 
 
@@ -124,7 +125,7 @@ if you wish to run the Python version of the model, paste the following command:
 docker build -t titanic-notebook -f ./src/python_version/Dockerfile .
 ```
 
-4. ### Run the Docker Container
+4. ## Run the Docker Container
 
 
 ![Run Demo](assets/run.gif)
@@ -169,7 +170,7 @@ docker run --rm -v "$(pwd)/src/data:/app/data" -v "$(pwd)/output_folder:/app/out
 
 ```
 
-5. ### Observe Results
+5. ## Observe Results
 
 
 ![output Demo](assets/output.gif)
